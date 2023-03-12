@@ -1,0 +1,162 @@
+---
+title: "Data605_Assignment07"
+author: "Mahmud Hasan Al Raji"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Let X1, X2, . . . , Xn be n mutually independent random variables, each of which is uniformly distributed on the integers from 1 to k. Let Y denote the minimum of the Xi’s. Find the distribution of Y .
+
+** Ans-1:
+
+Let, y be a value in the range between 1 and k. As Y is the minimum of the Xi's, then the probability distribution of Y will be the following: 
+
+P(Y= y) = P(X1 > y) * P(X2 > y) * .............. * P(Xn > y)
+
+It is given that each Xi is uniformly distributed on the integers from 1 to k. 
+
+So, the probability of observing a particular value between 1 and k for Xi where the value will be greater than y is:
+
+P(Xi > y) = (k - y + 1) / k , for y = 1, 2, ..........., k 
+
+Hence, the probability distribution of Y for y=1,2,3,...,k is:
+
+P(Y = y) = [(k - y + 1) / k]^n  
+
+
+# 2. Your organization owns a copier (future lawyers, etc.) or MRI (future doctors). This machine has a manufacturer’s expected lifetime of 10 years. This means that we expect one failure every ten years. (Include the probability statements and R Code for each part.).
+
+a. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a geometric. (Hint: the probability is equivalent to not failing during the first 8 years..)
+
+```{r}
+#P(X=9)=(1-p)^(9-1)*p # Here, the stated equation is for geometric distribution. and X is the number of triql to get the first success i.e. the first fail which will be occurred at 9th year 
+p=0.1 # probability of given success
+probability_machine_will_fail_after_8_year=(1-0.1)^8*0.1
+probability_machine_will_fail_after_8_year
+expected_value=(1/p)
+expected_value
+variance=(1-p)/p^2
+standard_deviation=sqrt(variance)
+standard_deviation
+```
+Therefore, the probability of the machine that will fail after 8 years is 0.04304672, expected value is 10, and standaerd deviation is 9.486833
+
+** Geometric probability using R code:
+```{r }
+p =0.1   # probability of success
+x =8   # number of trials
+prob = dgeom(x, p)   # probability of getting success on the x-th trial
+prob 
+expected_value =1/p   
+expected_value
+sd = sqrt((1-p)/p^2)   # standard deviation
+sd
+```
+
+b. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as an exponential.
+
+```{r}
+
+# P(x<=k)=1-e^(-k*lambda) # exponential probability distribution equation 
+k=8
+lambda=1/10
+e=2.718
+probability_machine_will_fail_after_8_year=1-(1-e^(-k*lambda)) # P(x>=k)=1-(1-e^(-k*lambda)), exponential probability for complement probability formula is used
+probability_machine_will_fail_after_8_year
+expected_value=1/lambda
+expected_value
+standard_deviation=sqrt(1/lambda^2)
+standard_deviation
+
+```
+Therefore, the probability is 0.45, expected value is 10 and standard deviation is 10
+
+** Exponential probability using R code:
+```{r}
+lambda = 1/10   # failure rate
+x = 8   # time in years
+prob = 1 - pexp(x, lambda)   # probability that machine will fail after 8 years
+prob
+ev = 1/lambda   # expected value
+ev
+sd= sqrt(1/lambda^2)   # standard deviation
+sd
+
+```
+
+c. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a binomial. (Hint: 0 success in 8 years)
+
+```{r}
+# P(k successes in n trials) = (n choose k) * p^k * (1-p)^(n-k) # bionomial probabilty formula, where,p=probability of success, k= number of successes, n= trial numbers
+n=8
+k=0
+p=0.1
+q=1-p
+probability_machine_will_fail_after_8_year=choose(n,k)*(p)^k*(1-p)^(n-k) 
+probability_machine_will_fail_after_8_year
+
+expected_value= n*p
+expected_value
+standard_deviation=sqrt(n*p*q)
+standard_deviation
+```
+Therefore, probabilty is 0.4305, expected value is 0.8, standard deviation is 0.85
+
+** Binomial probability using R code:
+
+```{r}
+n = 8
+p = 1/10
+q = (1-p)
+k = 0
+
+prob= dbinom(k, n, p)
+prob
+
+ev= n * p # expected value
+ev
+sd = sqrt(n*p*q) # standard deviation
+sd
+
+```
+
+d. What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a Poisson.
+
+```{r}
+
+# P(x) = (e^(-lambda) * lambda^x) / x! # Poisson probability mass distribution equation, where, P(x) = probability of occurring exactly x events in a given time interval lambda= average number of events in time interval
+x=0 # number of fail in 8 years
+lambda=8/10
+e=2.718
+probability_machine_will_fail_after_8_year= 1-(e^(-lambda)*(lambda)^x)/factorial(x)
+probability_machine_will_fail_after_8_year
+expected_value=lambda
+expected_value
+standard_deviation=sqrt(lambda)
+standard_deviation
+```
+Therefore, probability is 0.551, expected value is 0.8 and standaed deviation is 0.894
+
+** Poisson probability using R code:
+```{r}
+lambda = 8/10
+
+prob= 1 - dpois(0, lambda )
+prob
+ev=lambda # expected value 
+ev
+sd=sqrt(lambda )#standard deviation
+sd
+```
+
+
+
+
+
+
+
+
